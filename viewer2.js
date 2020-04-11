@@ -461,22 +461,21 @@ function skinOpr(event) {
 }
 
 //导出皮肤或工程
-async function outputFile(type) {
+function outputFile(type) {
     let a = document.createElement("a");
     a.download = SKIN_INFO.name + "." + (type == "skin" ? "png" : "json");
     if (!confirm("要导出" + (type == "skin" ? "皮肤" : "工程") + "吗？")) return;
     let s;
     if (type == "skin") {
-        await DRAW.toBlob(blob=>s=blob);
+        s=DRAW.toDataURL();
     } else {
         s = JSON.stringify(SKIN_INFO);
         s = new Blob([s], { type: "application/octet-stream" });
+        s = URL.createObjectURL(s);
+        setTimeout(_=>URL.revokeObjectURL(s));
     }
-    s = URL.createObjectURL(s);
     a.href = s;
     a.click();
-    URL.revokeObjectURL(s);
-
 }
 
 //改名
