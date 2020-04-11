@@ -461,13 +461,13 @@ function skinOpr(event) {
 }
 
 //导出皮肤或工程
-function outputFile(type) {
+async function outputFile(type) {
     let a = document.createElement("a");
     a.download = SKIN_INFO.name + "." + (type == "skin" ? "png" : "json");
     if (!confirm("要导出" + (type == "skin" ? "皮肤" : "工程") + "吗？")) return;
     let s;
     if (type == "skin") {
-        s = DRAW.toBlob();
+        await DRAW.toBlob(blob=>s=blob);
     } else {
         s = JSON.stringify(SKIN_INFO);
         s = new Blob([s], { type: "application/octet-stream" });
